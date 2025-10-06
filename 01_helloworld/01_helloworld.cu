@@ -1,6 +1,8 @@
+#include <stdio.h>
+
 __global__ void hello_cuda(){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    printf("[ %d ] Hello World!", idx)
+    printf("[ %d ] Hello Cuda!", idx);
 }
 
 int main(){
