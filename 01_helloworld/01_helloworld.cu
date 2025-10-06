@@ -2,7 +2,7 @@
 
 __global__ void hello_cuda(){
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    printf("[ %d ] Hello Cuda!", idx);
+    printf("[%d] Hello Cuda", idx);
 }
 
 int main(){
@@ -10,3 +10,4 @@ int main(){
     cudaDeviceSynchronize();
     return 0;
 }
+
