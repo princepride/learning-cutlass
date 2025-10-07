@@ -6,7 +6,7 @@ __global__ void hello_cuda(){
 }
 
 int main(){
-    hello_cuda<<<1, 1>>>();
+    hello_cuda<<<4, 2>>>();
     cudaDeviceSynchronize();
     return 0;
 }
