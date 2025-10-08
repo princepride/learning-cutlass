@@ -261,3 +261,15 @@ int main(){
 
 
 ![](assets/20251008_160201_image.png)
+
+## CUDA 程序的线程层次结构（按从小到大）
+- **Thread（线程）**: 由 CUDA 运行时分配，每个线程有自己的寄存器与程序计数器，通过 `threadIdx` 等标识；硬件上对应到一个执行通道（lane）。
+- **Warp（束/扭）**: GPU 的基本调度单位。NVIDIA 架构中每个 warp 固定为 32 个线程（历史或跨厂商文档可能写“最多 32”/32 或 64，NVIDIA 现行就是 32）。同一 warp 内线程在硬件上锁步执行。
+- **Block（线程块）**: 用户定义的线程集合，通过 `blockIdx` 标识。一个 block 由多个 warp 组成，能共享片上共享内存与同步（如 `__syncthreads()`）。
+- **Grid（网格）**: 由一个或多个 block 构成，一次 kernel 启动对应一个 grid。
+
+### 关于 warp（补充要点）
+- **执行模型**: CUDA 采用 SIMT（Single Instruction, Multiple Threads）。
+- **调度**: warp 由硬件的 warp scheduler 与 dispatch port 发射到执行单元。
+- **开销**: CUDA 的 warp/线程调度被设计为“接近零开销”；创建线程的额外成本约为一个时钟级别。
+- **逻辑 vs 硬件视图**: 逻辑上是一个 thread block；硬件上被切分成每组 32 线程的多个 warp；执行时由控制逻辑把 warp 交给 SM 的执行单元。
