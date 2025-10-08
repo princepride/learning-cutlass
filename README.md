@@ -273,3 +273,34 @@ int main(){
 - **调度**: warp 由硬件的 warp scheduler 与 dispatch port 发射到执行单元。
 - **开销**: CUDA 的 warp/线程调度被设计为“接近零开销”；创建线程的额外成本约为一个时钟级别。
 - **逻辑 vs 硬件视图**: 逻辑上是一个 thread block；硬件上被切分成每组 32 线程的多个 warp；执行时由控制逻辑把 warp 交给 SM 的执行单元。
+
+## CUDA 错误检测宏
+
+```
+// 错误宏定义
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true) {
+    if (code != cudaSuccess) {
+        fprintf(stderr, "GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+        if (abort) exit(code);
+    }
+}
+
+// 错误宏用法
+gpuErrchk(cudaMalloc((void**)&A_d, ARRAY_SIZE*sizeof(float)));
+gpuErrchk(cudaMemcpy(C_d, C_h, ARRAY_SIZE*sizeof(float), cudaMemcpyHostToDevice));
+gpuErrchk(cudaMemcpy(A_h, A_d, ARRAY_SIZE*sizeof(float), cudaMemcpyDeviceToHost));
+```
+
+## **CUDA main函数编写流程**
+
+* host端申请内存并初始化数据
+* device端申请内存
+* host端数据拷贝到device端
+* (计时开始)
+* 启动CUDA kernel
+* (计时结束)
+* device端把结果拷贝回host端
+* 检查device端计算结果和host端计算结果
+* 释放host和device端内存
