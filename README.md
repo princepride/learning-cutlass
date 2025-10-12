@@ -304,3 +304,8 @@ gpuErrchk(cudaMemcpy(A_h, A_d, ARRAY_SIZE*sizeof(float), cudaMemcpyDeviceToHost)
 * device端把结果拷贝回host端
 * 检查device端计算结果和host端计算结果
 * 释放host和device端内存
+
+## 向量化的向量加法
+
+- 加速vectorAdd，向量化load & store
+- 可以用来测量GPU显存带宽
