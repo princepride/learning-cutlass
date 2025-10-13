@@ -310,6 +310,9 @@ gpuErrchk(cudaMemcpy(A_h, A_d, ARRAY_SIZE*sizeof(float), cudaMemcpyDeviceToHost)
 - 加速vectorAdd，向量化load & store
 - 可以用来测量GPU显存带宽
 
+## CPU架构
+![alt text](image-2.png)
+
 ## CPU执行流程
 ![alt text](image.png)
 
@@ -321,3 +324,6 @@ CPU详细的执行步骤如下：
     * 这些数据会被加载到CPU内部的**储存单元 (SRAM)**。
     * **控制单元**发出信号，将指令和数据发送给**运算单元**进行计算。
 * **更新指针与循环：** 在一个指令周期执行的同时，指令指针寄存器 (IP) 会更新并指向下一条指令的地址，以便下一个周期的取指操作，从而形成一个不断循环的流水线过程。
+
+## GPU架构
+![alt text](image-1.png)
